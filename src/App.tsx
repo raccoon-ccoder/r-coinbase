@@ -5,7 +5,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 // ReactQueryDevtools : render할 수 있는 컴포넌트인데 캐시에 있는 query를 보여줌
 
 const GlobalStyle = createGlobalStyle`
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap');
     ${reset}
     a{
         text-decoration: none;
@@ -15,7 +15,7 @@ const GlobalStyle = createGlobalStyle`
         box-sizing: border-box;
     }
     body {
-        font-family: 'Noto Sans KR', sans-serif;
+        font-family: "Roboto","Noto Sans KR","Dotum","돋움","sans-serif",Arial,Helvetica;
         background-color: ${props => props.theme.bgColor};
         color: ${props => props.theme.textColor};
     }

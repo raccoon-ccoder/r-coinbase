@@ -1,7 +1,7 @@
 const BASE_URL = `https://api.coinpaprika.com/v1`;
 
 export async function fetchCoins() {
-    const json = await (await fetch(`${BASE_URL}/coins`)).json();
+    const json = await (await fetch(`${BASE_URL}/tickers?quotes=KRW`)).json();
     return json;
 }
 
@@ -17,7 +17,7 @@ export async function fetchPriceInfo(coinId: string | undefined) {
 
 export async function fetchCoinHistory(coinId: string) {
     const endDate = Math.floor(Date.now() / 1000);
-    const startDate = endDate - 60 * 60 * 24 * 7 * 2;
+    const startDate = endDate - 60 * 60 * 24 * 7 * 3;
     const coinHistory = await (await fetch(`${BASE_URL}/coins/${coinId}/ohlcv/historical?start=${startDate}&end=${endDate}`)).json();
     return coinHistory;
 }

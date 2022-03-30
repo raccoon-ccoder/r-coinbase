@@ -18,7 +18,11 @@
       "resolveJsonModule": true,
       "isolatedModules": true,
       "noEmit": true,
-      "jsx": "react-jsx"
+      "jsx": "react-jsx",
+      // Could not find a declaration file for module 'react-helmet'
+      // Solution: All you have to do is edit your TypeScript Config file 
+      // (tsconfig.json) and add a new key value pair as
+      "noImplicitAny": false
     },
     "include": [
       "src"

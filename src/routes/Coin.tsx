@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, Outlet, useLocation, useParams, useMatch } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import styled from "styled-components";
 import Price from "./Price";
 import Chart from "./Chart";
@@ -153,7 +154,13 @@ function Coin() {
     const priceMatch = useMatch("/:coinId/price");   
     const chartMatch = useMatch("/:coinId/chart");
     const { isLoading: infoLoading, data: info } = useQuery<IInfo>(["info",coinId], () => fetchCoinInfo(coinId));
-    const { isLoading: priceLoading, data: price } = useQuery<IPrice>(["tickers",coinId], () => fetchPriceInfo(coinId));
+    const { isLoading: priceLoading, data: price } = useQuery<IPrice>(
+        ["tickers",coinId], 
+        () => fetchPriceInfo(coinId),
+        {
+            refetchInterval: 5000,
+        }
+    );
     // priceLoading, price는 type이 아닌 해당 값을 원하는 변수에 담겠다는 의미
     // 또한 query key는 unique해야 하기에 다른 이름으로 부여 (string 뿐만 아니라 array도 가능)
 
@@ -188,6 +195,11 @@ function Coin() {
 
     return (
         <Container>
+            <Helmet>
+                <title>
+                    {state ? state : loading ? "Loading" : info?.name}
+                </title>
+            </Helmet>
             <Header>
                 <Title>{state ? state : loading ? "Loading" : info?.name}</Title>
             </Header>
@@ -205,8 +217,8 @@ function Coin() {
                             <span>${info?.symbol}</span>
                         </OverviewItem>
                         <OverviewItem>
-                            <span>Open Source:</span>
-                            <span>{info?.open_source ? "Yes" : "No"}</span>
+                            <span>Price:</span>
+                            <span>${price?.quotes.USD.price.toFixed(3)}</span>
                         </OverviewItem>
                     </Overview>
                     <Description>{info?.description}</Description>

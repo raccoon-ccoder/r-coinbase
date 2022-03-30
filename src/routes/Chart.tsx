@@ -54,19 +54,23 @@ function Chart() {
                         },
                         chart: {
                           type: "candlestick",
-                          height: 350,
+                          height: 300,
                           width: 500,
-                          toolbar: {
-                            show:false,
-                          },
                           background: "transparent",
                         },
                         stroke: {
                           curve: "smooth",
-                          width: 2,
+                          width: 1,
                         },
                         yaxis: {
-                          show: false,
+                          show: true,
+                          showAlways: true,
+                          tickAmount: 4,
+                          labels : {
+                            show: true,
+                            formatter: (value) => `${value.toFixed(2)}`,
+                            align: "center",
+                          },
                         },
                         xaxis: {
                           type: "datetime",
@@ -75,17 +79,20 @@ function Chart() {
                             style: {
                               colors: '#9c88ff'
                             }
-                          }
+                          },
+                          
                         },
+                        // tooltip: {
+                        //     y: {
+                        //         formatter: (value) => `$${value.toFixed(3)}`
+                        //     },
+                        // },
                         plotOptions: {
                           candlestick: {
                             colors: {
                               upward: '#3C90EB',
                               downward: '#DF7D46'
                             },
-                            wick: {
-                                useFillColor: true,
-                              }
                           }
                         }
                       }}

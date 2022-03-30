@@ -1,35 +1,80 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import styled from "styled-components";
 import { fetchCoins } from "../api";
 
 const Container = styled.div`
-    max-width: 480px;
+    width: 100%;
+    height: 100%;
+
+`;
+
+const MainContainer = styled.div`
+    width: 1200px;
     height: 100%;
     margin: 0 auto;
-    padding: 20px;
+    padding-top: 120px;
+    display: flex;
+    justify-content: center;
 `;
 
 const Header = styled.header`
-    height: 10vh;
+    height: 60px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    background-color: ${props => props.theme.mainColor};
+    padding: 10px 40px;
+`;
+
+const HeaderBox = styled.section`
+    width: 1200px;
+    height: 100%;
+    padding: 0 20px;
+    color: white;
+    display: flex;
+`;
+
+const Title = styled.h1`
+    font-size: 25px;
+    display: block;
+    margin-top: 8px;
+`;
+
+const Nav = styled.nav`
     display: flex;
     justify-content: center;
     align-items: center;
 `;
 
-const Title = styled.h1`
-    color: ${props => props.theme.accentColor};
-    font-size: 48px;
+const NavList = styled.ul`
+    list-style: none;
 `;
 
-const CoinList = styled.ul``;
+const NavItem = styled.li`
+    float: left;
+    margin-left: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    &:hover {
+        color: ${props => props.theme.headerAccentColor};
+    }
+`;
+
+const CoinList = styled.ul`
+    width: 800px;
+`;
 
 const Coin = styled.li`
     background-color: white;
-    color: ${props => props.theme.bgColor};
-    margin-bottom: 10px;
-    border-radius: 15px;
+    height: 100px;
+    border-bottom: 1px solid #f1f1f4;
+    color: ${props => props.theme.textColor};
     a {
         display: flex;
         align-items: center;
@@ -53,16 +98,21 @@ const Img = styled.img`
     margin-right: 10px;
 `;
 
-
 interface ICoins {
     id: string,
-    name: string,
-    symbol: string,
     rank: number,
-    is_new: boolean,
-    is_active: boolean,
-    type: string,
-};
+    name: string,
+     symbol: string,
+     quotes: { 
+     KRW: { 
+       price: number,
+       market_cap: number,
+       volume_24h: number,
+       percent_change_24h: number,
+       percent_change_7d: number
+    }
+  },
+}
 
 
 function Coins() {
@@ -80,26 +130,43 @@ function Coins() {
     }, []); */
 
     const { isLoading, data } = useQuery<ICoins[]>("allCoins", fetchCoins);
-
+    console.log(data);
     return (
     <Container>
+         <Helmet>
+                <title>
+                Raccoon Coinbase
+                </title>
+            </Helmet>
         <Header>
-            <Title>Raccoon Coinbase</Title>
+            <HeaderBox>
+                <Title>RBit</Title>
+                <Nav>
+                    <NavList>
+                        <NavItem>거래소</NavItem>
+                        <NavItem>입출금</NavItem>
+                        <NavItem>투자내역</NavItem>
+                    </NavList>
+                </Nav>
+            </HeaderBox>
         </Header>
-        { isLoading ? (
-            <Loader>isLoading</Loader>
-        ) : (
-            <CoinList>
-                {data?.slice(0, 100).map((coin) => (
-                    <Coin key={coin.id}>
-                        <Link to={`/${coin.id}`} state={coin.name}>
-                            <Img src={`https://raw.githubusercontent.com/ErikThiart/cryptocurrency-icons/master/16/${coin.name .toLowerCase().split(" ").join("-")}.png`} />
-                            {coin.name} &rarr;
-                        </Link>
-                    </Coin>
-                ))}
-            </CoinList>
-            )}
+        <MainContainer>
+            { isLoading ? (
+                <Loader>isLoading</Loader>
+            ) : (
+                <CoinList>
+                    {data?.slice(0, 100).map((coin) => (
+                        <Coin key={coin.id}>
+                            <Link to={`/${coin.id}`} state={coin.name}>
+                                <Img src={`https://raw.githubusercontent.com/ErikThiart/cryptocurrency-icons/master/16/${coin.name .toLowerCase().split(" ").join("-")}.png`} />
+                                {coin.name} &rarr;
+                            </Link>
+                            {coin.symbol}/KRW,{coin.quotes.KRW.price},{coin.quotes.KRW.percent_change_24h},{coin.quotes.KRW.volume_24h}
+                        </Coin>
+                    ))}
+                </CoinList>
+                )}
+        </MainContainer>
     </Container>
     );
 }
