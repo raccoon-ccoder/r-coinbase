@@ -4,20 +4,13 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import styled from "styled-components";
 import { fetchCoins } from "../api";
+import SearchIcon from "@material-ui/icons/Search";
+import { PinDropSharp } from "@material-ui/icons";
 
 const Container = styled.div`
     width: 100%;
     height: 100%;
 
-`;
-
-const MainContainer = styled.div`
-    width: 1200px;
-    height: 100%;
-    margin: 0 auto;
-    padding-top: 120px;
-    display: flex;
-    justify-content: center;
 `;
 
 const Header = styled.header`
@@ -66,19 +59,83 @@ const NavItem = styled.li`
     }
 `;
 
-const CoinList = styled.ul`
-    width: 800px;
+const MainContainer = styled.div`
+    max-width: 480px;
+    height: 100%;
+    margin: 0 auto;
+    margin-top: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    box-shadow: 5px 5px 5px 1px #d5d6db;
+
+    @media ${props => props.theme.desktop} {
+        margin-top: 120px;
+    }
 `;
 
-const Coin = styled.li`
+// const SearchBox = styled.div`
+//     height: 50px;
+// `;
+
+const SearchForm = styled.form`
+    width: 100%;
+    height: 40px;
+    padding: 10px 20px;
+    box-sizing: border-box;
     background-color: white;
-    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #d5d6db;
+`;
+
+const Search = styled.input`
+    width: 100%;
+    height: 100%;
+    font-weight: 600;
+    margin-right: 10px;
+`;
+
+const CoinsContainer = styled.div`
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+`;
+
+const CoinNav = styled.ul`
+    width: 100%;
+    height: 35px;
+    background-color: #f2f2f4;
+    color: #333;
+    font-size: 11px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+`;
+
+const CoinNavItem = styled.li<{width : string}>`
+    width: ${props => props.width};
+`;
+
+const CoinsBox = styled.div``;
+
+const CoinList = styled.table`
+    width: 100%;
+`;
+
+const Coin = styled.tr`
+    background-color: white;
     border-bottom: 1px solid #f1f1f4;
     color: ${props => props.theme.textColor};
+    font-size: 13px;
+    height: 45px;
+    padding: 5px 0px;
     a {
         display: flex;
         align-items: center;
-        padding: 20px;
         transition: color 0.2s ease-in;
     }
     &:hover {
@@ -86,6 +143,22 @@ const Coin = styled.li`
             color: ${props => props.theme.accentColor};
         }
     }
+`;
+
+
+const CoinName = styled.td<{width: string}>`
+    width: ${props => props.width};
+`;
+const CoinPrice = styled.td<{width: string, color: string}>`
+    width: ${props => props.width};
+    color: ${props => props.color};
+`;
+const CoinChange = styled.td<{width: string, color: string}>`
+    width: ${props => props.width};
+    color: ${props => props.color};
+`;
+const CoinVolume = styled.td<{width: string}>`
+    width: ${props => props.width};
 `;
 
 const Loader = styled.div`
@@ -130,7 +203,9 @@ function Coins() {
     }, []); */
 
     const { isLoading, data } = useQuery<ICoins[]>("allCoins", fetchCoins);
-    console.log(data);
+
+    // console.log(data);
+
     return (
     <Container>
          <Helmet>
@@ -154,17 +229,39 @@ function Coins() {
             { isLoading ? (
                 <Loader>isLoading</Loader>
             ) : (
-                <CoinList>
-                    {data?.slice(0, 100).map((coin) => (
-                        <Coin key={coin.id}>
-                            <Link to={`/${coin.id}`} state={coin.name}>
-                                <Img src={`https://raw.githubusercontent.com/ErikThiart/cryptocurrency-icons/master/16/${coin.name .toLowerCase().split(" ").join("-")}.png`} />
-                                {coin.name} &rarr;
-                            </Link>
-                            {coin.symbol}/KRW,{coin.quotes.KRW.price},{coin.quotes.KRW.percent_change_24h},{coin.quotes.KRW.volume_24h}
-                        </Coin>
-                    ))}
-                </CoinList>
+                <>
+                <SearchForm>
+                    <Search placeholder="코인명 검색" />
+                    <SearchIcon htmlColor="#093687" />
+                </SearchForm>
+                <CoinsContainer>
+                    <CoinNav>
+                        <CoinNavItem width="30%">코인명</CoinNavItem>
+                        <CoinNavItem width="30%">현재가</CoinNavItem>
+                        <CoinNavItem width="15%">전일대비</CoinNavItem>
+                        <CoinNavItem width="25%">거래대금</CoinNavItem>
+                    </CoinNav>
+                    <CoinList>
+                        {data?.slice(0, 100).map((coin) => (
+                            <Coin key={coin.id}>
+                                <CoinName width="30%">
+                                    <Link to={`/${coin.id}`} state={coin.name}>
+                                        {coin.name}<br/>{coin.symbol}
+                                    </Link>
+                                </CoinName>
+                                <CoinPrice width="30%" color={coin.quotes.KRW.percent_change_24h > 0 ? "#c84a31" : "#1261c4"}>
+                                    { coin.quotes.KRW.price >= 100 ? 
+                                        Math.floor(coin.quotes.KRW.price).toLocaleString() :
+                                        coin.quotes.KRW.price.toFixed(2)
+                                    }
+                                </CoinPrice>
+                                <CoinChange width="15%"  color={coin.quotes.KRW.percent_change_24h > 0 ? "#c84a31" : "#1261c4"}>{coin.quotes.KRW.percent_change_24h}%</CoinChange>
+                                <CoinVolume width="25%">{Math.floor(coin.quotes.KRW.volume_24h/1000000).toLocaleString()}백만</CoinVolume>
+                            </Coin>
+                        ))}
+                    </CoinList>
+                </CoinsContainer>
+                </>
                 )}
         </MainContainer>
     </Container>

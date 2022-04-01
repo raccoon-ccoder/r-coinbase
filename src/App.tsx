@@ -19,6 +19,9 @@ const GlobalStyle = createGlobalStyle`
         background-color: ${props => props.theme.bgColor};
         color: ${props => props.theme.textColor};
     }
+    input {
+        border: none;
+    }
 `;
 
 function App() {
