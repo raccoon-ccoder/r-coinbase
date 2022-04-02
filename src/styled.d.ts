@@ -8,6 +8,7 @@ declare module 'styled-components' {
     accentColor: string;
     mainColor: string;
     headerAccentColor: string;
+    grayColor: string;
     desktop: string,
   }
 }

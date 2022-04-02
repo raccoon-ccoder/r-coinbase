@@ -14,13 +14,20 @@ const GlobalStyle = createGlobalStyle`
     *{
         box-sizing: border-box;
     }
+    html {
+        height: 100%;
+    }
     body {
         font-family: "Roboto","Noto Sans KR","Dotum","돋움","sans-serif",Arial,Helvetica;
         background-color: ${props => props.theme.bgColor};
         color: ${props => props.theme.textColor};
+        height: 100%;
     }
     input {
         border: none;
+    }
+    #root {
+        height: 100%;
     }
 `;
 

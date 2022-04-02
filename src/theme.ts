@@ -6,5 +6,6 @@ export const theme:DefaultTheme = {
     accentColor: "#f4f5f8",
     mainColor: "#093687",
     headerAccentColor: "#5b73a3",
+    grayColor: "#929292",
     desktop: "(min-width: 500px)",
 };

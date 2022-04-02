@@ -5,12 +5,12 @@ import { Helmet } from "react-helmet";
 import styled from "styled-components";
 import { fetchCoins } from "../api";
 import SearchIcon from "@material-ui/icons/Search";
-import { PinDropSharp } from "@material-ui/icons";
+import HomeIcon from "@material-ui/icons/HomeOutlined";
+import SyncAltIcon from "@material-ui/icons/SyncAltOutlined";
 
 const Container = styled.div`
     width: 100%;
     height: 100%;
-
 `;
 
 const Header = styled.header`
@@ -22,42 +22,68 @@ const Header = styled.header`
     position: fixed;
     top: 0;
     background-color: ${props => props.theme.mainColor};
-    padding: 10px 40px;
+    padding: 10px 0px;
+
+    @media ${props => props.theme.desktop} {
+        padding: 10px 40px;
+    }
 `;
 
 const HeaderBox = styled.section`
-    width: 1200px;
+    width: 100%;
     height: 100%;
-    padding: 0 20px;
     color: white;
     display: flex;
+    justify-content: center;
+    @media ${props => props.theme.desktop} {
+        width: 1200px;
+        padding: 0 20px;
+    }
 `;
 
 const Title = styled.h1`
     font-size: 25px;
     display: block;
     margin-top: 8px;
+    display: none;
+
+    @media ${props => props.theme.desktop} {
+        
+    }
 `;
 
 const Nav = styled.nav`
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 `;
 
 const NavList = styled.ul`
+    width: 100%;
     list-style: none;
 `;
 
 const NavItem = styled.li`
-    float: left;
-    margin-left: 50px;
+    width: 33%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
     &:hover {
         color: ${props => props.theme.headerAccentColor};
     }
+
+    @media ${props => props.theme.desktop} {
+        margin-left: 50px;
+    }
 `;
+
+const NavIcon = styled.div``;
+
+const NavName = styled.span``;
 
 const MainContainer = styled.div`
     max-width: 480px;
@@ -69,15 +95,11 @@ const MainContainer = styled.div`
     align-items: center;
     flex-direction: column;
     box-shadow: 5px 5px 5px 1px #d5d6db;
-
+    overflow: hidden;
     @media ${props => props.theme.desktop} {
         margin-top: 120px;
     }
 `;
-
-// const SearchBox = styled.div`
-//     height: 50px;
-// `;
 
 const SearchForm = styled.form`
     width: 100%;
@@ -101,7 +123,7 @@ const Search = styled.input`
 const CoinsContainer = styled.div`
     width: 100%;
     height: 100%;
-    overflow: scroll;
+    overflow: hidden;
 `;
 
 const CoinNav = styled.ul`
@@ -120,10 +142,11 @@ const CoinNavItem = styled.li<{width : string}>`
     width: ${props => props.width};
 `;
 
-const CoinsBox = styled.div``;
-
 const CoinList = styled.table`
     width: 100%;
+    height: 100%;
+    overflow: hidden;
+    table-layout: fixed;
 `;
 
 const Coin = styled.tr`
@@ -134,9 +157,11 @@ const Coin = styled.tr`
     height: 45px;
     padding: 5px 0px;
     a {
-        display: flex;
-        align-items: center;
         transition: color 0.2s ease-in;
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-start;
+        flex-direction: column;
     }
     &:hover {
         a {
@@ -145,30 +170,34 @@ const Coin = styled.tr`
     }
 `;
 
+interface CoinInfoProps {
+    width: string;
+    color?: string;
+    thick?: string;
+    fontSize?: string,
+    textAlign?: string,
+}
 
-const CoinName = styled.td<{width: string}>`
-    width: ${props => props.width};
-`;
-const CoinPrice = styled.td<{width: string, color: string}>`
+const CoinInfo = styled.td<CoinInfoProps>`
+    padding: 0 5px;
     width: ${props => props.width};
     color: ${props => props.color};
+    font-weight: ${props => props.thick};
+    font-size: ${props => props.fontSize};
+    text-align: ${props => props.textAlign};
+    vertical-align: middle;
 `;
-const CoinChange = styled.td<{width: string, color: string}>`
-    width: ${props => props.width};
-    color: ${props => props.color};
-`;
-const CoinVolume = styled.td<{width: string}>`
-    width: ${props => props.width};
+
+const CoinName = styled.span``;
+
+const CoinId = styled.span`
+    margin-top: 3px;
+    font-weight: 100;
+    color: ${props => props.theme.grayColor};
 `;
 
 const Loader = styled.div`
     text-align: center;
-`;
-
-const Img = styled.img`
-    width: 25px;
-    height: 25px;
-    margin-right: 10px;
 `;
 
 interface ICoins {
@@ -187,6 +216,11 @@ interface ICoins {
   },
 }
 
+const CoinBox = styled.div`
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+`;
 
 function Coins() {
     /*  const[coins, setCoins] = useState<ICoins[]>([]);
@@ -218,9 +252,30 @@ function Coins() {
                 <Title>RBit</Title>
                 <Nav>
                     <NavList>
-                        <NavItem>거래소</NavItem>
-                        <NavItem>입출금</NavItem>
-                        <NavItem>투자내역</NavItem>
+                        <NavItem>
+                            <NavIcon>
+                                <SearchIcon />
+                            </NavIcon>
+                            <NavName>
+                                거래소
+                            </NavName>
+                        </NavItem>
+                        <NavItem>
+                            <NavIcon>
+                                <HomeIcon />
+                            </NavIcon>
+                            <NavName>
+                                입출금
+                            </NavName>
+                        </NavItem>
+                        <NavItem>
+                            <NavIcon>
+                                <SyncAltIcon />
+                            </NavIcon>
+                            <NavName>
+                                투자내역
+                            </NavName>
+                        </NavItem>
                     </NavList>
                 </Nav>
             </HeaderBox>
@@ -236,30 +291,61 @@ function Coins() {
                 </SearchForm>
                 <CoinsContainer>
                     <CoinNav>
-                        <CoinNavItem width="30%">코인명</CoinNavItem>
-                        <CoinNavItem width="30%">현재가</CoinNavItem>
-                        <CoinNavItem width="15%">전일대비</CoinNavItem>
-                        <CoinNavItem width="25%">거래대금</CoinNavItem>
+                        <CoinNavItem width="35%">
+                        코인명
+                        </CoinNavItem>
+                        <CoinNavItem width="22%">
+                            현재가
+                        </CoinNavItem>
+                        <CoinNavItem width="15%">
+                           전일대비
+                        </CoinNavItem>
+                        <CoinNavItem width="28%">
+                        거래대금(백만)
+                        </CoinNavItem>
                     </CoinNav>
+                 <CoinBox>
                     <CoinList>
                         {data?.slice(0, 100).map((coin) => (
                             <Coin key={coin.id}>
-                                <CoinName width="30%">
+                                <CoinInfo 
+                                    width="35%" 
+                                    thick="600"
+                                >
                                     <Link to={`/${coin.id}`} state={coin.name}>
-                                        {coin.name}<br/>{coin.symbol}
+                                        <CoinName>{coin.name}</CoinName>
+                                        <CoinId>{coin.symbol}/KRW</CoinId>
                                     </Link>
-                                </CoinName>
-                                <CoinPrice width="30%" color={coin.quotes.KRW.percent_change_24h > 0 ? "#c84a31" : "#1261c4"}>
+                                </CoinInfo>
+                                <CoinInfo 
+                                    width="22%" 
+                                    color={coin.quotes.KRW.percent_change_24h > 0 ? "#c84a31" : "#1261c4"} 
+                                    thick="600"
+                                    textAlign="right"
+                                >
                                     { coin.quotes.KRW.price >= 100 ? 
                                         Math.floor(coin.quotes.KRW.price).toLocaleString() :
                                         coin.quotes.KRW.price.toFixed(2)
                                     }
-                                </CoinPrice>
-                                <CoinChange width="15%"  color={coin.quotes.KRW.percent_change_24h > 0 ? "#c84a31" : "#1261c4"}>{coin.quotes.KRW.percent_change_24h}%</CoinChange>
-                                <CoinVolume width="25%">{Math.floor(coin.quotes.KRW.volume_24h/1000000).toLocaleString()}백만</CoinVolume>
+                                </CoinInfo>
+                                <CoinInfo 
+                                    width="15%" 
+                                    color={coin.quotes.KRW.percent_change_24h > 0 ? "#c84a31" : "#1261c4"}
+                                    textAlign="right"
+                                >
+                                    {coin.quotes.KRW.percent_change_24h}%
+                                </CoinInfo>
+                                <CoinInfo 
+                                    width="28%" 
+                                    fontSize="12px"
+                                    textAlign="right"
+                                >
+                                    {Math.floor(coin.quotes.KRW.volume_24h/1000000).toLocaleString()}
+                                </CoinInfo>
                             </Coin>
                         ))}
                     </CoinList>
+                    </CoinBox>
                 </CoinsContainer>
                 </>
                 )}
