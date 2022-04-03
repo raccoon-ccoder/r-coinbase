@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -11,6 +11,10 @@ import SyncAltIcon from "@material-ui/icons/SyncAltOutlined";
 const Container = styled.div`
     width: 100%;
     height: 100%;
+    @media ${props => props.theme.desktop} {
+        padding: 100px 0 50px 0;
+        min-height: 500px;
+    }
 `;
 
 const Header = styled.header`
@@ -23,7 +27,6 @@ const Header = styled.header`
     top: 0;
     background-color: ${props => props.theme.mainColor};
     padding: 10px 0px;
-
     @media ${props => props.theme.desktop} {
         padding: 10px 40px;
     }
@@ -31,24 +34,19 @@ const Header = styled.header`
 
 const HeaderBox = styled.section`
     width: 100%;
+    max-width: 420px;
     height: 100%;
     color: white;
     display: flex;
     justify-content: center;
-    @media ${props => props.theme.desktop} {
-        width: 1200px;
-        padding: 0 20px;
-    }
 `;
 
 const Title = styled.h1`
     font-size: 25px;
-    display: block;
     margin-top: 8px;
     display: none;
-
     @media ${props => props.theme.desktop} {
-        
+        display: block;
     }
 `;
 
@@ -57,11 +55,17 @@ const Nav = styled.nav`
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 `;
 
 const NavList = styled.ul`
     width: 100%;
     list-style: none;
+    display: flex;
+    justify-content: center;
+    @media ${props => props.theme.desktop} {
+        width: 70%;
+    }
 `;
 
 const NavItem = styled.li`
@@ -75,15 +79,13 @@ const NavItem = styled.li`
     &:hover {
         color: ${props => props.theme.headerAccentColor};
     }
-
-    @media ${props => props.theme.desktop} {
-        margin-left: 50px;
-    }
 `;
 
 const NavIcon = styled.div``;
 
-const NavName = styled.span``;
+const NavName = styled.span`
+    font-size: 11px;
+`;
 
 const MainContainer = styled.div`
     max-width: 480px;
@@ -97,7 +99,7 @@ const MainContainer = styled.div`
     box-shadow: 5px 5px 5px 1px #d5d6db;
     overflow: hidden;
     @media ${props => props.theme.desktop} {
-        margin-top: 120px;
+        margin-top: 0px;
     }
 `;
 
@@ -144,7 +146,6 @@ const CoinNavItem = styled.li<{width : string}>`
 
 const CoinList = styled.table`
     width: 100%;
-    height: 100%;
     overflow: hidden;
     table-layout: fixed;
 `;
@@ -236,9 +237,26 @@ function Coins() {
         getCoins();
     }, []); */
 
-    const { isLoading, data } = useQuery<ICoins[]>("allCoins", fetchCoins);
+    let { isLoading, data } = useQuery<ICoins[]>("allCoins", fetchCoins);
+    const [coinName, setCoinName] = useState("");
+    const [coinList, setCoinList] = useState<any>([]);
 
-    // console.log(data);
+    const onChange = (e: React.FormEvent<HTMLInputElement>) => {
+        const { 
+            currentTarget: {value},
+        } = e;
+        setCoinName(value);
+    };
+
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        data = data?.filter(v => v.name.includes(coinName));
+        setCoinList(data);
+    };
+   
+    useEffect(() => {
+        setCoinList(data);
+    }, []);
 
     return (
     <Container>
@@ -285,8 +303,8 @@ function Coins() {
                 <Loader>isLoading</Loader>
             ) : (
                 <>
-                <SearchForm>
-                    <Search placeholder="코인명 검색" />
+                <SearchForm onSubmit={onSubmit}>
+                    <Search placeholder="코인명 검색" onChange={onChange}/>
                     <SearchIcon htmlColor="#093687" />
                 </SearchForm>
                 <CoinsContainer>
@@ -306,7 +324,7 @@ function Coins() {
                     </CoinNav>
                  <CoinBox>
                     <CoinList>
-                        {data?.slice(0, 100).map((coin) => (
+                        {coinList?.slice(0, 100).map((coin) => (
                             <Coin key={coin.id}>
                                 <CoinInfo 
                                     width="35%" 
