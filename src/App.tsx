@@ -1,7 +1,10 @@
 import Router from "./Router";
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle, ThemeContext } from "styled-components";
 import reset from "styled-reset";
+import { ThemeProvider } from 'styled-components';
+import { lightTheme, darkTheme } from './theme';
 import { ReactQueryDevtools } from "react-query/devtools";
+import { useContext, useState } from "react";
 // ReactQueryDevtools : render할 수 있는 컴포넌트인데 캐시에 있는 query를 보여줌
 
 const GlobalStyle = createGlobalStyle`
@@ -32,11 +35,18 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 function App() {
+    const [isDarkMode, setIsDarkMode] = useState(false);
+    const toggleDarkMode = () => {
+        setIsDarkMode((prev) => !prev);
+    };
+
     return (
     <>
-        <GlobalStyle />
-        <Router />
-        <ReactQueryDevtools initialIsOpen={true} />
+       <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme }>
+            <GlobalStyle />
+            <Router isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
+            <ReactQueryDevtools initialIsOpen={true} />
+        </ThemeProvider>
     </>
     );
 }

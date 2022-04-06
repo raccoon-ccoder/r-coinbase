@@ -4,11 +4,11 @@ import Coin from "./routes/Coin";
 import Price from "./routes/Price";
 import Chart from "./routes/Chart";
 
-function Router() {
+function Router({isDarkMode, toggleDarkMode}) {
     return(
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Coins />}/>
+                <Route path="/" element={<Coins isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />}/>
                 <Route path="/:coinId" element={<Coin />}>
                     <Route path="price" element={<Price />} />
                     <Route path="chart" element={<Chart />} />

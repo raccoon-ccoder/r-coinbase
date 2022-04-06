@@ -5,8 +5,7 @@ import { Helmet } from "react-helmet";
 import styled from "styled-components";
 import { fetchCoins } from "../api";
 import SearchIcon from "@material-ui/icons/Search";
-import HomeIcon from "@material-ui/icons/HomeOutlined";
-import SyncAltIcon from "@material-ui/icons/SyncAltOutlined";
+import Header from "../components/Header";
 
 const Container = styled.div`
     width: 100%;
@@ -15,76 +14,6 @@ const Container = styled.div`
         padding: 100px 0 50px 0;
         min-height: 500px;
     }
-`;
-
-const Header = styled.header`
-    height: 60px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    background-color: ${props => props.theme.mainColor};
-    padding: 10px 0px;
-    @media ${props => props.theme.desktop} {
-        padding: 10px 40px;
-    }
-`;
-
-const HeaderBox = styled.section`
-    width: 100%;
-    max-width: 420px;
-    height: 100%;
-    color: white;
-    display: flex;
-    justify-content: center;
-`;
-
-const Title = styled.h1`
-    font-size: 25px;
-    margin-top: 8px;
-    display: none;
-    @media ${props => props.theme.desktop} {
-        display: block;
-    }
-`;
-
-const Nav = styled.nav`
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-`;
-
-const NavList = styled.ul`
-    width: 100%;
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    @media ${props => props.theme.desktop} {
-        width: 70%;
-    }
-`;
-
-const NavItem = styled.li`
-    width: 33%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    &:hover {
-        color: ${props => props.theme.headerAccentColor};
-    }
-`;
-
-const NavIcon = styled.div``;
-
-const NavName = styled.span`
-    font-size: 11px;
 `;
 
 const MainContainer = styled.div`
@@ -96,7 +25,7 @@ const MainContainer = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    box-shadow: 5px 5px 5px 1px #d5d6db;
+    box-shadow: 5px 5px 5px 1px ${props => props.theme.shadowColor};
     overflow: hidden;
     @media ${props => props.theme.desktop} {
         margin-top: 0px;
@@ -113,6 +42,7 @@ const SearchForm = styled.form`
     justify-content: center;
     align-items: center;
     border-bottom: 1px solid #d5d6db;
+    background-color: ${props => props.theme.basicColor};
 `;
 
 const Search = styled.input`
@@ -120,6 +50,7 @@ const Search = styled.input`
     height: 100%;
     font-weight: 600;
     margin-right: 10px;
+    background-color: ${props => props.theme.basicColor};
 `;
 
 const CoinsContainer = styled.div`
@@ -131,8 +62,8 @@ const CoinsContainer = styled.div`
 const CoinNav = styled.ul`
     width: 100%;
     height: 35px;
-    background-color: #f2f2f4;
-    color: #333;
+    background-color: ${props => props.theme.coinNavColor};
+    color: ${props => props.theme.textColor};
     font-size: 11px;
     display: flex;
     justify-content: center;
@@ -148,11 +79,11 @@ const CoinList = styled.table`
     width: 100%;
     overflow: hidden;
     table-layout: fixed;
+    background-color: ${props => props.theme.basicColor};
 `;
 
 const Coin = styled.tr`
-    background-color: white;
-    border-bottom: 1px solid #f1f1f4;
+    border-bottom: 1px solid ${props => props.theme.tableLineColor};
     color: ${props => props.theme.textColor};
     font-size: 13px;
     height: 45px;
@@ -223,7 +154,7 @@ const CoinBox = styled.div`
     overflow: scroll;
 `;
 
-function Coins() {
+function Coins({isDarkMode, toggleDarkMode}) {
     /*  const[coins, setCoins] = useState<ICoins[]>([]);
     const[loading, setLoading] = useState(true);
 
@@ -239,23 +170,23 @@ function Coins() {
 
     let { isLoading, data } = useQuery<ICoins[]>("allCoins", fetchCoins);
     const [coinName, setCoinName] = useState("");
-    const [coinList, setCoinList] = useState<any>([]);
+    const [coinList, setCoinList] = useState<ICoins[]>();
 
     const onChange = (e: React.FormEvent<HTMLInputElement>) => {
         const { 
             currentTarget: {value},
         } = e;
-        setCoinName(value);
-    };
-
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        data = data?.filter(v => v.name.includes(coinName));
-        setCoinList(data);
+        if(value !== "") {
+            setCoinName(value);
+            setCoinList(data?.filter(v => v.name.includes(coinName)));
+        }else {
+            setCoinName(value);
+            setCoinList(data);
+        }
     };
    
     useEffect(() => {
-        setCoinList(data);
+        setCoinList(data)
     }, []);
 
     return (
@@ -265,45 +196,13 @@ function Coins() {
                 Raccoon Coinbase
                 </title>
             </Helmet>
-        <Header>
-            <HeaderBox>
-                <Title>RBit</Title>
-                <Nav>
-                    <NavList>
-                        <NavItem>
-                            <NavIcon>
-                                <SearchIcon />
-                            </NavIcon>
-                            <NavName>
-                                거래소
-                            </NavName>
-                        </NavItem>
-                        <NavItem>
-                            <NavIcon>
-                                <HomeIcon />
-                            </NavIcon>
-                            <NavName>
-                                입출금
-                            </NavName>
-                        </NavItem>
-                        <NavItem>
-                            <NavIcon>
-                                <SyncAltIcon />
-                            </NavIcon>
-                            <NavName>
-                                투자내역
-                            </NavName>
-                        </NavItem>
-                    </NavList>
-                </Nav>
-            </HeaderBox>
-        </Header>
+        <Header isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
         <MainContainer>
             { isLoading ? (
                 <Loader>isLoading</Loader>
             ) : (
                 <>
-                <SearchForm onSubmit={onSubmit}>
+                <SearchForm>
                     <Search placeholder="코인명 검색" onChange={onChange}/>
                     <SearchIcon htmlColor="#093687" />
                 </SearchForm>
