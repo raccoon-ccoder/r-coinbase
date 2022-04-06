@@ -51,6 +51,7 @@ const Search = styled.input`
     font-weight: 600;
     margin-right: 10px;
     background-color: ${props => props.theme.basicColor};
+    color: ${props => props.theme.textColor};
 `;
 
 const CoinsContainer = styled.div`
@@ -186,7 +187,7 @@ function Coins({isDarkMode, toggleDarkMode}) {
     };
    
     useEffect(() => {
-        setCoinList(data)
+        setCoinList(data);
     }, []);
 
     return (
@@ -209,7 +210,7 @@ function Coins({isDarkMode, toggleDarkMode}) {
                 <CoinsContainer>
                     <CoinNav>
                         <CoinNavItem width="35%">
-                        코인명
+                            코인명
                         </CoinNavItem>
                         <CoinNavItem width="22%">
                             현재가
@@ -218,7 +219,7 @@ function Coins({isDarkMode, toggleDarkMode}) {
                            전일대비
                         </CoinNavItem>
                         <CoinNavItem width="28%">
-                        거래대금(백만)
+                            거래대금(백만)
                         </CoinNavItem>
                     </CoinNav>
                  <CoinBox>

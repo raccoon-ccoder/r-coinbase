@@ -21,3 +21,10 @@ export async function fetchCoinHistory(coinId: string) {
     const coinHistory = await (await fetch(`${BASE_URL}/coins/${coinId}/ohlcv/historical?start=${startDate}&end=${endDate}`)).json();
     return coinHistory;
 }
+
+export async function fetchPriceHistory(coinId: string) {
+    const endDate = Math.floor(Date.now() / 1000);
+    const startDate = endDate - 60 * 60 * 24 * 7 * 3;
+    const priceHistory = await (await fetch(`${BASE_URL}/tickers/${coinId}/historical?start=${startDate}&end=${endDate}`)).json();
+    return priceHistory;
+}

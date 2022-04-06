@@ -4,28 +4,39 @@ import { Helmet } from "react-helmet";
 import styled from "styled-components";
 import Price from "./Price";
 import Chart from "./Chart";
+import Header from "../components/Header";
 import { useQuery } from "react-query";
 import { fetchCoinInfo } from "../api";
 import { fetchPriceInfo } from "../api";
 
 
 const Container = styled.div`
+     width: 100%;
+    height: 100%;
+    @media ${props => props.theme.desktop} {
+        padding: 100px 0 50px 0;
+        min-height: 500px;
+    }
+`;
+
+const MainContainer = styled.div`
     max-width: 480px;
     height: 100%;
     margin: 0 auto;
-    padding: 20px;
-`;
-
-const Header = styled.header`
-    height: 10vh;
+    margin-top: 80px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+    @media ${props => props.theme.desktop} {
+        margin-top: 0px;
+    }
 `;
 
 const Title = styled.h1`
-    color: ${props => props.theme.accentColor};
-    font-size: 48px;
+    color: ${props => props.theme.grayColor};
+    font-size: 30px;
 `;
 
 const Loader = styled.div`
@@ -33,11 +44,13 @@ const Loader = styled.div`
 `;
 
 const Overview = styled.div`
-  display: flex;
-  justify-content: space-between;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 10px 20px;
-  border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    background-color: ${props => props.theme.coinNavColor};
+    padding: 10px 20px;
+    border-radius: 10px;
+    margin: 10px 0px;
+    width: 90%;
 `;
 
 const OverviewItem = styled.div`
@@ -53,11 +66,12 @@ const OverviewItem = styled.div`
 `;
 
 const Description = styled.p`
-  margin: 20px 0px;
+  margin: 20px;
 `;
 
 const Tabs = styled.div`
   display: grid;
+  width: 90%;
   grid-template-columns: repeat(2, 1fr);
   margin: 25px 0px;
   gap: 10px;
@@ -66,9 +80,9 @@ const Tabs = styled.div`
 const Tab = styled.span<{ isActive: boolean }>`
   text-align: center;
   text-transform: uppercase;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 400;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${props => props.theme.grayColor};
   padding: 7px 0px;
   border-radius: 10px;
   color: ${(props) =>
@@ -148,7 +162,7 @@ type IParams = {
     coinId: string;
 };
 
-function Coin() {
+function Coin({isDarkMode, toggleDarkMode}) {
     const { coinId } = useParams() as IParams;
     const { state } = useLocation() as RouteState;
     const priceMatch = useMatch("/:coinId/price");   
@@ -200,9 +214,10 @@ function Coin() {
                     {state ? state : loading ? "Loading" : info?.name}
                 </title>
             </Helmet>
-            <Header>
-                <Title>{state ? state : loading ? "Loading" : info?.name}</Title>
-            </Header>
+            <Header isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
+
+        <MainContainer>
+            <Title>{state ? state : loading ? "Loading" : info?.name}</Title>
             { loading ? (
                 <Loader>loading</Loader>
             ) : (
@@ -246,6 +261,8 @@ function Coin() {
                 </>
                 )
             }
+        </MainContainer>
+           
         </Container>
     );
 }

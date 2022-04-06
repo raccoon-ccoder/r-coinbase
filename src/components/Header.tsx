@@ -4,6 +4,7 @@ import HomeIcon from "@material-ui/icons/HomeOutlined";
 import SyncAltIcon from "@material-ui/icons/SyncAltOutlined";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { useContext } from "react";
+import { Link } from "react-router-dom";
 
 const HeaderContainer = styled.header`
     height: 60px;
@@ -93,7 +94,7 @@ function Header({isDarkMode, toggleDarkMode}) {
                             <SearchIcon />
                         </NavIcon>
                         <NavName>
-                            거래소
+                            <Link to="/">거래소</Link>
                         </NavName>
                     </NavItem>
                     <NavItem>

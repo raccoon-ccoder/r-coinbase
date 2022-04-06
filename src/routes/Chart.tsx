@@ -2,6 +2,7 @@ import { useQuery } from "react-query";
 import { useOutletContext, useParams } from "react-router-dom";
 import { fetchCoinHistory } from "../api";
 import ReactApexChart from "react-apexcharts";
+import styled from "styled-components";
 
 interface ICoin {
     coinId: string,
@@ -18,6 +19,13 @@ interface IHistory {
     market_cap: number,
 }
 
+const Test = styled.div`
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+`;
+
+
 function Chart() {
     // coinId 가져오기 방법 1. useParams() 이용해서 parameter 가져오기
     // const params = useParams();
@@ -28,7 +36,7 @@ function Chart() {
     const {isLoading, data} = useQuery<IHistory[]>(["ohlcv", coinId], () => fetchCoinHistory(coinId));
     
     return (
-        <div>
+        <Test>
             { isLoading ? (
                 "Loading Chart"
             ) : (
@@ -50,12 +58,12 @@ function Chart() {
                       ]}
                       options={{
                         theme: {
-                          mode: "dark",
+                          mode: "light",
                         },
                         chart: {
                           type: "candlestick",
-                          height: 300,
-                          width: 500,
+                          height: "100%",
+                          width: "100%",
                           background: "transparent",
                         },
                         stroke: {
@@ -82,11 +90,6 @@ function Chart() {
                           },
                           
                         },
-                        // tooltip: {
-                        //     y: {
-                        //         formatter: (value) => `$${value.toFixed(3)}`
-                        //     },
-                        // },
                         plotOptions: {
                           candlestick: {
                             colors: {
@@ -98,7 +101,7 @@ function Chart() {
                       }}
                 />
             ) }
-        </div>
+        </Test>
     );
 }
 
