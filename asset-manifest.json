@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/r-coinbase/static/js/main.3c88811b.js",
+    "main.js": "/r-coinbase/static/js/main.b953d2f9.js",
     "index.html": "/r-coinbase/index.html",
-    "main.3c88811b.js.map": "/r-coinbase/static/js/main.3c88811b.js.map"
+    "main.b953d2f9.js.map": "/r-coinbase/static/js/main.b953d2f9.js.map"
   },
   "entrypoints": [
-    "static/js/main.3c88811b.js"
+    "static/js/main.b953d2f9.js"
   ]
 }
