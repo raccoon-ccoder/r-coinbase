@@ -19,7 +19,7 @@ interface IHistory {
     market_cap: number,
 }
 
-const Test = styled.div`
+const ChartContainer = styled.div`
   width: 100%;
   height: 100%;
   padding: 20px;
@@ -36,7 +36,7 @@ function Chart() {
     const {isLoading, data} = useQuery<IHistory[]>(["ohlcv", coinId], () => fetchCoinHistory(coinId));
     
     return (
-        <Test>
+        <ChartContainer>
             { isLoading ? (
                 "Loading Chart"
             ) : (
@@ -101,7 +101,7 @@ function Chart() {
                       }}
                 />
             ) }
-        </Test>
+        </ChartContainer>
     );
 }
 

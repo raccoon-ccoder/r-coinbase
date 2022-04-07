@@ -25,6 +25,6 @@ export async function fetchCoinHistory(coinId: string) {
 export async function fetchPriceHistory(coinId: string) {
     const endDate = Math.floor(Date.now() / 1000);
     const startDate = endDate - 60 * 60 * 24 * 7 * 3;
-    const priceHistory = await (await fetch(`${BASE_URL}/tickers/${coinId}/historical?start=${startDate}&end=${endDate}`)).json();
+    const priceHistory = await (await fetch(`${BASE_URL}/tickers/${coinId}/historical?start=${startDate}&end=${endDate}&interval=24h`)).json();
     return priceHistory;
 }
