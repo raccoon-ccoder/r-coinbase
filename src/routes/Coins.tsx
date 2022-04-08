@@ -169,7 +169,7 @@ function Coins({isDarkMode, toggleDarkMode}) {
         getCoins();
     }, []); */
 
-    let { isLoading, data } = useQuery<ICoins[]>("allCoins", fetchCoins);
+    let { isLoading, data } = useQuery<ICoins[]>("allCoins", fetchCoins, {onSuccess : (data) => setCoinList(data)});
     const [coinName, setCoinName] = useState("");
     const [coinList, setCoinList] = useState<ICoins[]>();
 
@@ -185,10 +185,6 @@ function Coins({isDarkMode, toggleDarkMode}) {
             setCoinList(data);
         }
     };
-   
-    useEffect(() => {
-        setCoinList(data);
-    }, []);
 
     return (
     <Container>
