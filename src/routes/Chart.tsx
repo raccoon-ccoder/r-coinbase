@@ -3,6 +3,8 @@ import { useOutletContext, useParams } from "react-router-dom";
 import { fetchCoinHistory } from "../api";
 import ReactApexChart from "react-apexcharts";
 import styled from "styled-components";
+import { useRecoilValue } from "recoil";
+import { isDarkAtom } from "../atoms";
 
 interface ICoin {
     coinId: string,
@@ -37,6 +39,7 @@ function Chart() {
     
     const {isLoading, data} = useQuery<IHistory[]>(["ohlcv", coinId], () => fetchCoinHistory(coinId));
     
+    const isDarkMode = useRecoilValue(isDarkAtom);
     return (
         <ChartContainer>
             { isLoading ? (
@@ -60,7 +63,7 @@ function Chart() {
                       ]}
                       options={{
                         theme: {
-                          mode: "light",
+                          mode:  isDarkMode ? "dark" : "light",
                         },
                         chart: {
                           type: "candlestick",

@@ -162,7 +162,7 @@ type IParams = {
     coinId: string;
 };
 
-function Coin({isDarkMode, toggleDarkMode}) {
+function Coin() {
     const { coinId } = useParams() as IParams;
     const { state } = useLocation() as RouteState;
     const priceMatch = useMatch("/:coinId/price");   
@@ -214,7 +214,7 @@ function Coin({isDarkMode, toggleDarkMode}) {
                     {state ? state : loading ? "Loading" : info?.name}
                 </title>
             </Helmet>
-            <Header isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
+            <Header />
 
         <MainContainer>
             <Title>{state ? state : loading ? "Loading" : info?.name}</Title>

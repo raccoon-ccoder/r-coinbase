@@ -5,6 +5,8 @@ import SyncAltIcon from "@material-ui/icons/SyncAltOutlined";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isDarkAtom } from "../atoms";
 
 const HeaderContainer = styled.header`
     height: 60px;
@@ -79,10 +81,11 @@ const NavName = styled.span`
     font-size: 11px;
 `;
 
-const Btn = styled.button``;
+function Header() {
+    const isDarkMode = useRecoilValue(isDarkAtom);
+    const setDarkAtom = useSetRecoilState(isDarkAtom);
+    const toggleDarkMode = () => setDarkAtom((prev) => !prev);
 
-function Header({isDarkMode, toggleDarkMode}) {
-    
     return (
     <HeaderContainer>
         <HeaderBox>

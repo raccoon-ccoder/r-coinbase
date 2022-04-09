@@ -5,6 +5,8 @@ import { ThemeProvider } from 'styled-components';
 import { lightTheme, darkTheme } from './theme';
 import { ReactQueryDevtools } from "react-query/devtools";
 import { useContext, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { isDarkAtom } from "./atoms";
 // ReactQueryDevtools : render할 수 있는 컴포넌트인데 캐시에 있는 query를 보여줌
 
 const GlobalStyle = createGlobalStyle`
@@ -35,16 +37,12 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 function App() {
-    const [isDarkMode, setIsDarkMode] = useState(false);
-    const toggleDarkMode = () => {
-        setIsDarkMode((prev) => !prev);
-    };
-
+    const isDarkMode = useRecoilValue(isDarkAtom);
     return (
     <>
        <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme }>
             <GlobalStyle />
-            <Router isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
+            <Router/>
             <ReactQueryDevtools initialIsOpen={true} />
         </ThemeProvider>
     </>

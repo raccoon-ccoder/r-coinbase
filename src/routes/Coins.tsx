@@ -155,7 +155,7 @@ const CoinBox = styled.div`
     overflow: scroll;
 `;
 
-function Coins({isDarkMode, toggleDarkMode}) {
+function Coins() {
     /*  const[coins, setCoins] = useState<ICoins[]>([]);
     const[loading, setLoading] = useState(true);
 
@@ -193,7 +193,7 @@ function Coins({isDarkMode, toggleDarkMode}) {
                 Raccoon Coinbase
                 </title>
             </Helmet>
-        <Header isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
+        <Header />
         <MainContainer>
             { isLoading ? (
                 <Loader>isLoading</Loader>
